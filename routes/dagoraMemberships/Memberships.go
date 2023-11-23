@@ -17,6 +17,10 @@ type body struct {
 	Address string `json:"address"`
 }
 
+type response struct {
+	Result bool `json:"result"`
+}
+
 func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodPost {
@@ -58,11 +62,17 @@ func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 		}
 
 		if balance.Cmp(big.NewInt(0)) == 0 {
-			helpers.RespondWithJSON(w, http.StatusOK, false)
+			resp := response{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
 
-		helpers.RespondWithJSON(w, http.StatusOK, true)
+		resp := response{
+			Result: true,
+		}
+		helpers.RespondWithJSON(w, http.StatusOK, resp)
 		return
 	}
 }
