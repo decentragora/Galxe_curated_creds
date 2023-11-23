@@ -5,16 +5,17 @@ import (
 	"dagora_galaxe_querys/contracts"
 	"dagora_galaxe_querys/helpers"
 	"dagora_galaxe_querys/models"
-	"math/big"
-
-	// "math/big"
-	// "sync"
+	"encoding/json"
 	"log"
+	"math/big"
 	"net/http"
 
-	//"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 )
+
+type body struct {
+	Address string `json:"address"`
+}
 
 func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -22,8 +23,17 @@ func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 			helpers.RespondWithError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
+		//unmarshal body
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
 
-		address := r.URL.Query().Get("address")
+		address := b.Address
+		// GET ADDRESS from body
+
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
