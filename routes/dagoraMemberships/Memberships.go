@@ -84,7 +84,14 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		address := r.URL.Query().Get("address")
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
@@ -143,7 +150,14 @@ func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		address := r.URL.Query().Get("address")
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
@@ -202,7 +216,14 @@ func CheckAddressHoldsPerclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		address := r.URL.Query().Get("address")
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")

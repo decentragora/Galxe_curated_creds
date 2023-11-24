@@ -7,6 +7,7 @@ import (
 	"dagora_galaxe_querys/contracts"
 	"dagora_galaxe_querys/helpers"
 	"dagora_galaxe_querys/models"
+	"encoding/json"
 	"log"
 	"math/big"
 	"net/http"
@@ -16,6 +17,14 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
+type body struct {
+	Address string `json:"address"`
+}
+
+type response struct {
+	Result bool `json:"result"`
+}
+
 func CheckAddressForFundingPublicGoods(clts *models.Clients) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodPost {
@@ -23,7 +32,14 @@ func CheckAddressForFundingPublicGoods(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		address := r.URL.Query().Get("address")
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
@@ -85,7 +101,14 @@ func CheckAddressForBonusCampaignAltraCardHolder(clts *models.Clients) http.Hand
 			return
 		}
 
-		address := r.URL.Query().Get("address")
+		var b body
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
