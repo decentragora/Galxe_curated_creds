@@ -54,19 +54,22 @@ func CheckAddressHasSentFiveOrMoreTxOnPGN(clts *models.Clients) http.HandlerFunc
 			return
 		}
 
-		if nonce-1 >= 5 {
+		log.Println("nonce", nonce)
+
+		// if nonce - one is greater than or equal to 5 then return true
+		if nonce > 5 {
 			resp := response{
 				Result: true,
 			}
 			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
+		} else {
+			resp := response{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
+			return
 		}
-
-		resp := response{
-			Result: false,
-		}
-		helpers.RespondWithJSON(w, http.StatusOK, resp)
-		return
 	}
 }
 
@@ -104,18 +107,18 @@ func CheckAddressHasSentTenOrMoreTxOnPGN(clts *models.Clients) http.HandlerFunc 
 			return
 		}
 
-		if nonce-1 >= 10 {
+		if nonce > 10 {
 			resp := response{
 				Result: true,
 			}
 			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
+		} else {
+			resp := response{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
+			return
 		}
-
-		resp := response{
-			Result: false,
-		}
-		helpers.RespondWithJSON(w, http.StatusOK, resp)
-		return
 	}
 }
