@@ -13,14 +13,6 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-type body struct {
-	Address string `json:"address"`
-}
-
-type response struct {
-	Result bool `json:"result"`
-}
-
 func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodPost {
@@ -28,7 +20,7 @@ func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 		//unmarshal body
-		var b body
+		var b models.DefaultBody
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
@@ -36,17 +28,15 @@ func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 		}
 
 		address := b.Address
-		// GET ADDRESS from body
-
 		isValid := helpers.IsValidAddress(address)
 		if isValid != true {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
 			return
 		}
-		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.NFTContracts["Dagora Membership"].Address
-		optimsimClient := clts.OptimismClient.Client
 
+		commonAddress := common.HexToAddress(address)
+		contractAddress := contracts.Contracts["Dagora Membership"].Address
+		optimsimClient := clts.OptimismClient.Client
 		membershipInstance, err := dagoramemberships.NewDagoramembershipsabi(contractAddress, optimsimClient)
 		if err != nil {
 			log.Println(err)
@@ -62,14 +52,14 @@ func CheckAddressHasMembership(clts *models.Clients) http.HandlerFunc {
 		}
 
 		if balance.Cmp(big.NewInt(0)) == 0 {
-			resp := response{
+			resp := models.DefaultResponse{
 				Result: false,
 			}
 			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
 
-		resp := response{
+		resp := models.DefaultResponse{
 			Result: true,
 		}
 		helpers.RespondWithJSON(w, http.StatusOK, resp)
@@ -84,7 +74,7 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		var b body
+		var b models.DefaultBody
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
@@ -98,7 +88,7 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.NFTContracts["Dagora Membership"].Address
+		contractAddress := contracts.Contracts["Dagora Membership"].Address
 		optimsimClient := clts.OptimismClient.Client
 
 		membershipInstance, err := dagoramemberships.NewDagoramembershipsabi(contractAddress, optimsimClient)
@@ -135,13 +125,13 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 		// 3 - perclesian
 		// if tier is 0, then return true
 		if tier == 0 {
-			resp := response{
+			resp := models.DefaultResponse{
 				Result: true,
 			}
 			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
-		resp := response{
+		resp := models.DefaultResponse{
 			Result: false,
 		}
 		helpers.RespondWithJSON(w, http.StatusOK, resp)
@@ -149,14 +139,14 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 	}
 }
 
-func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
+func CheckAddressHoldsDagorian(clts *models.Clients) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodPost {
 			helpers.RespondWithError(w, http.StatusMethodNotAllowed, "Method not allowed")
 			return
 		}
 
-		var b body
+		var b models.DefaultBody
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
@@ -170,7 +160,7 @@ func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.NFTContracts["Dagora Membership"].Address
+		contractAddress := contracts.Contracts["Dagora Membership"].Address
 		optimsimClient := clts.OptimismClient.Client
 
 		membershipInstance, err := dagoramemberships.NewDagoramembershipsabi(contractAddress, optimsimClient)
@@ -188,7 +178,85 @@ func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
 		}
 
 		if tokenId.Cmp(big.NewInt(0)) == 0 {
-			helpers.RespondWithJSON(w, http.StatusOK, false)
+			resp := models.DefaultResponse{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
+			return
+		}
+
+		// check that tokenId is dagora tier
+		tier, err := membershipInstance.GetMembershipTier(nil, tokenId)
+		if err != nil {
+			log.Println(err)
+			helpers.RespondWithError(w, http.StatusInternalServerError, "Internal server error")
+			return
+		}
+
+		// tiers are
+		// 0 - ecclesia
+		// 1 - dagora
+		// 2 - hoplite
+		// 3 - perclesian
+		// if tier is 1, then return true
+		if tier == 1 {
+			resp := models.DefaultResponse{
+				Result: true,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
+			return
+		}
+		resp := models.DefaultResponse{
+			Result: false,
+		}
+		helpers.RespondWithJSON(w, http.StatusOK, resp)
+		return
+	}
+}
+
+func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet && r.Method != http.MethodPost {
+			helpers.RespondWithError(w, http.StatusMethodNotAllowed, "Method not allowed")
+			return
+		}
+
+		var b models.DefaultBody
+		err := json.NewDecoder(r.Body).Decode(&b)
+		if err != nil {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
+			return
+		}
+
+		address := b.Address
+		isValid := helpers.IsValidAddress(address)
+		if isValid != true {
+			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid address")
+			return
+		}
+		commonAddress := common.HexToAddress(address)
+		contractAddress := contracts.Contracts["Dagora Membership"].Address
+		optimsimClient := clts.OptimismClient.Client
+
+		membershipInstance, err := dagoramemberships.NewDagoramembershipsabi(contractAddress, optimsimClient)
+		if err != nil {
+			log.Println(err)
+			helpers.RespondWithError(w, http.StatusInternalServerError, "Internal server error")
+			return
+		}
+
+		tokenId, err := membershipInstance.AddressTokenIds(nil, commonAddress)
+		if err != nil {
+			log.Println(err)
+			helpers.RespondWithError(w, http.StatusInternalServerError, "Internal server error")
+			return
+		}
+
+		if tokenId.Cmp(big.NewInt(0)) == 0 {
+			resp := models.DefaultResponse{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
 
@@ -205,15 +273,15 @@ func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
 		// 1 - dagora
 		// 2 - hoplite
 		// 3 - perclesian
-		// if tier is 2, then return true
-		if tier == 2 {
-			resp := response{
+		// if tier greater or equal to 2, then return true
+		if tier >= 2 {
+			resp := models.DefaultResponse{
 				Result: true,
 			}
 			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
-		resp := response{
+		resp := models.DefaultResponse{
 			Result: false,
 		}
 		helpers.RespondWithJSON(w, http.StatusOK, resp)
@@ -228,7 +296,7 @@ func CheckAddressHoldsPerclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		var b body
+		var b models.DefaultBody
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
 			helpers.RespondWithError(w, http.StatusBadRequest, "Invalid body")
@@ -242,7 +310,7 @@ func CheckAddressHoldsPerclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.NFTContracts["Dagora Membership"].Address
+		contractAddress := contracts.Contracts["Dagora Membership"].Address
 		optimsimClient := clts.OptimismClient.Client
 
 		membershipInstance, err := dagoramemberships.NewDagoramembershipsabi(contractAddress, optimsimClient)
@@ -279,10 +347,16 @@ func CheckAddressHoldsPerclesia(clts *models.Clients) http.HandlerFunc {
 		// 3 - perclesian
 		// if tier is 3, then return true
 		if tier == 3 {
-			helpers.RespondWithJSON(w, http.StatusOK, true)
+			resp := models.DefaultResponse{
+				Result: true,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
-		helpers.RespondWithJSON(w, http.StatusOK, false)
+		resp := models.DefaultResponse{
+			Result: false,
+		}
+		helpers.RespondWithJSON(w, http.StatusOK, resp)
 		return
 	}
 }

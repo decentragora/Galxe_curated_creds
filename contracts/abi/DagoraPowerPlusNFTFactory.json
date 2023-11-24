@@ -1,0 +1,330 @@
+[
+    {
+        "inputs": [],
+        "name": "DagoraFactory__ExpiredMembership",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DagoraFactory__FailedToCreateContract",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "tier",
+                "type": "uint8"
+            },
+            {
+                "internalType": "uint8",
+                "name": "neededTier",
+                "type": "uint8"
+            }
+        ],
+        "name": "DagoraFactory__InvalidTier",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DagoraFactory__NotDAgoraMembershipsOwnerOrDelegate",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DagoraFactory__TokenCreationPaused",
+        "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint8",
+                "name": "version",
+                "type": "uint8"
+            }
+        ],
+        "name": "Initialized",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "newContractAddress",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "ownerOF",
+                "type": "address"
+            }
+        ],
+        "name": "PowerPlusNFTACreated",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "contractsDeployed",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "string",
+                        "name": "name_",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "symbol_",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "baseURI_",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_bulkBuyLimit",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint16",
+                        "name": "_maxAllowListAmount",
+                        "type": "uint16"
+                    },
+                    {
+                        "internalType": "uint96",
+                        "name": "_royaltyBps",
+                        "type": "uint96"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_mintPrice",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_presaleMintCost",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "_maxSupply",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_royaltyRecipient",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "_newOwner",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "_merkleRoot",
+                        "type": "bytes32"
+                    }
+                ],
+                "internalType": "struct PowerPlusNFT.Params",
+                "name": "params",
+                "type": "tuple"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "createPowerPlusNFT",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "dAgoraMembershipsAddress",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_user",
+                "type": "address"
+            }
+        ],
+        "name": "getUserContracts",
+        "outputs": [
+            {
+                "internalType": "address[]",
+                "name": "",
+                "type": "address[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_dAgoraMembershipsAddress",
+                "type": "address"
+            }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "isPaused",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minPowerNFTATier",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint8",
+                "name": "_minPowerNFTATier",
+                "type": "uint8"
+            }
+        ],
+        "name": "setMinPowerNFTATier",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "togglePaused",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "userContracts",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]
