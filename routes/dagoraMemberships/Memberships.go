@@ -105,8 +105,15 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 			return
 		}
 
-		if tokenId == big.NewInt(0) {
-			helpers.RespondWithJSON(w, http.StatusOK, false)
+		log.Println("Address and token id", commonAddress, tokenId)
+		log.Println(tokenId == big.NewInt(0))
+		log.Println(tokenId.Cmp(big.NewInt(0)) == 0)
+
+		if tokenId.Cmp(big.NewInt(0)) == 0 {
+			resp := models.DefaultResponse{
+				Result: false,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
 
@@ -199,7 +206,7 @@ func CheckAddressHoldsDagorian(clts *models.Clients) http.HandlerFunc {
 		// 2 - hoplite
 		// 3 - perclesian
 		// if tier is 1, then return true
-		if tier == 1 {
+		if tier >= 1 {
 			resp := models.DefaultResponse{
 				Result: true,
 			}
