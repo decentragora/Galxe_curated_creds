@@ -149,7 +149,6 @@ func CheckAddressForTwoOrMoreImpactCards(clts *models.Clients) http.HandlerFunc 
 			totalBalance.Add(totalBalance, balance)
 		}
 
-		log.Println("totalBalance", totalBalance)
 		// Balance is greater or equal to 2 return true, else return false
 		if totalBalance.Cmp(big.NewInt(2)) >= 0 {
 			resp := models.DefaultResponse{
@@ -191,7 +190,7 @@ func CheckAddressForFullSetOfImpactCards(clts *models.Clients) http.HandlerFunc 
 		}
 
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.Contracts["Impact Card"].Address
+		contractAddress := contracts.Contracts["ImpactCards"].Address
 		optimsimClient := clts.OptimismClient.Client
 		impactCardInstance, err := impactcardabi.NewImpactcardsabi(contractAddress, optimsimClient)
 		if err != nil {
