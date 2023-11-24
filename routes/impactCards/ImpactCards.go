@@ -37,7 +37,7 @@ func CheckAddressMintedImpactCards(clts *models.Clients) http.HandlerFunc {
 		}
 
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.Contracts["Impact Card"].Address
+		contractAddress := contracts.Contracts["ImpactCards"].Address
 		optimsimClient := clts.OptimismClient.Client
 		impactCardInstance, err := impactcardabi.NewImpactcardsabi(contractAddress, optimsimClient)
 		if err != nil {
