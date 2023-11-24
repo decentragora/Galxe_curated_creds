@@ -2,6 +2,11 @@ package dagoradeployers
 
 import (
 	_dagora_erc20_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraERC20Factory"
+	_dagora_nft_a_plus_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraNFTAPlusFactory"
+	_dagora_payment_splitter_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraPaymentSplitterFactory"
+	_dagora_power_nft_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraPowerNFTFactory"
+	_dagora_power_plus_nft_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraPowerPlusNFTFactory"
+	_dagora_simple_nft_factory "dagora_galaxe_querys/contractabi/dagoraFactorys/DagoraSimpleNFTFactory"
 
 	"dagora_galaxe_querys/contracts"
 	"dagora_galaxe_querys/helpers"
@@ -61,6 +66,24 @@ func checkDagoraSimpleNFTFactory(address common.Address, clts *models.Clients) b
 	optimismClient := clts.OptimismClient.Client
 	contractAddress := contracts.Contracts["DagoraSimpleNFTFactory"].Address
 
+	instance, err := _dagora_simple_nft_factory.NewDagorasimplefntfactory(contractAddress, optimismClient)
+	if err != nil {
+		return false
+	}
+
+	deployBal, err := instance.GetUserContracts(nil, address)
+	if err != nil {
+		return false
+	}
+
+	log.Println("deployBal", deployBal)
+	return false
+}
+
+func checkDagoraERC20Factory(address common.Address, clts *models.Clients) bool {
+	optimismClient := clts.OptimismClient.Client
+	contractAddress := contracts.Contracts["DagoraERC20Factory"].Address
+
 	instance, err := _dagora_erc20_factory.NewDagoraerc20factory(contractAddress, optimismClient)
 	if err != nil {
 		return false
@@ -75,35 +98,74 @@ func checkDagoraSimpleNFTFactory(address common.Address, clts *models.Clients) b
 	return false
 }
 
-func checkDagoraERC20Factory(address common.Address) bool {
-	// check if address has deployed a contract
-	// get the total supply of the contract
-	// get the balance of the address
-	// if balance > 0 then return true
-	// else return false
+func checkDagoraPaymentSplitterFactory(address common.Address, clts *models.Clients) bool {
+	optimismClient := clts.OptimismClient.Client
+	contractAddress := contracts.Contracts["DagoraPaymentSplitterFactory"].Address
+
+	instance, err := _dagora_payment_splitter_factory.NewDagorapaymentsplitterfactory(contractAddress, optimismClient)
+	if err != nil {
+		return false
+	}
+
+	deployBal, err := instance.GetUserContracts(nil, address)
+	if err != nil {
+		return false
+	}
+
+	log.Println("deployBal", deployBal)
 	return false
 }
 
-func checkDagoraPaymentSplitterFactory(address common.Address) bool {
-	// check if address has deployed a contract
-	// get the total supply of the contract
-	// get the balance of the address
-	// if balance > 0 then return true
-	// else return false
+func checkDagoraNFTAPlusFactory(address common.Address, clts *models.Clients) bool {
+	optismismClient := clts.OptimismClient.Client
+	contractAddress := contracts.Contracts["DagoraNFTAPlusFactory"].Address
+
+	instance, err := _dagora_nft_a_plus_factory.NewDagoranftaplusfactory(contractAddress, optismismClient)
+	if err != nil {
+		return false
+	}
+
+	deployBal, err := instance.GetUserContracts(nil, address)
+	if err != nil {
+		return false
+	}
+
+	log.Println("deployBal", deployBal)
 	return false
 }
 
-func checkDagoraNFTAPlusFactory(address common.Address) bool {
+func checkDagoraPowerNFTFactory(address common.Address, clts *models.Clients) bool {
+	optismismClient := clts.OptimismClient.Client
+	contractAddress := contracts.Contracts["DagoraPowerNFTFactory"].Address
 
+	instance, err := _dagora_power_nft_factory.NewDagorapowernft(contractAddress, optismismClient)
+	if err != nil {
+		return false
+	}
+
+	deployBal, err := instance.GetUserContracts(nil, address)
+	if err != nil {
+		return false
+	}
+
+	log.Println("deployBal", deployBal)
 	return false
 }
 
-func checkDagoraPowerNFTFactory(address common.Address) bool {
+func checkDagoraPowerPlusNFTFactory(address common.Address, clts *models.Clients) bool {
+	optismismClient := clts.OptimismClient.Client
+	contractAddress := contracts.Contracts["DagoraPowerPlusNFTFactory"].Address
 
-	return false
-}
+	instance, err := _dagora_power_plus_nft_factory.NewDagorapowerplusnft(contractAddress, optismismClient)
+	if err != nil {
+		return false
+	}
 
-func checkDagoraPowerPlusNFTFactory(address common.Address) bool {
+	deployBal, err := instance.GetUserContracts(nil, address)
+	if err != nil {
+		return false
+	}
 
+	log.Println("deployBal", deployBal)
 	return false
 }
