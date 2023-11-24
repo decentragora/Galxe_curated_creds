@@ -20,13 +20,13 @@ func HandleRoutes(r *mux.Router, clts *models.Clients) {
 
 	r.HandleFunc("/funding_public_goods", _campaign_two.CheckAddressForFundingPublicGoods(clts))
 
-	r.HandleFunc("/bonus_campaing_altra_card_holder", _campaign_two.CheckAddressForBonusCampaignAltraCardHolder(clts)).Methods("GET")
+	r.HandleFunc("/bonus_campaing_altra_card_holder", _campaign_two.CheckAddressForBonusCampaignAltraCardHolder(clts))
 
 	r.HandleFunc("/has_membership", _dagora_membership.CheckAddressHasMembership(clts))
 
-	r.HandleFunc("/hold_ecclesia", _dagora_membership.CheckAddressHoldEcclesia(clts)).Methods("GET")
+	r.HandleFunc("/hold_ecclesia", _dagora_membership.CheckAddressHoldEcclesia(clts))
 
-	r.HandleFunc("/hold_hoplite", _dagora_membership.CheckAddressHoldsHoplite(clts)).Methods("GET")
+	r.HandleFunc("/hold_hoplite", _dagora_membership.CheckAddressHoldsHoplite(clts))
 
-	r.HandleFunc("/hold_perclesia", _dagora_membership.CheckAddressHoldsPerclesia(clts)).Methods("GET")
+	r.HandleFunc("/hold_perclesia", _dagora_membership.CheckAddressHoldsPerclesia(clts))
 }
