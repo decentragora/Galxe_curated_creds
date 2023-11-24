@@ -112,7 +112,7 @@ func CheckAddressForTwoOrMoreImpactCards(clts *models.Clients) http.HandlerFunc 
 		}
 
 		commonAddress := common.HexToAddress(address)
-		contractAddress := contracts.Contracts["Impact Card"].Address
+		contractAddress := contracts.Contracts["ImpactCards"].Address
 		optimsimClient := clts.OptimismClient.Client
 		impactCardInstance, err := impactcardabi.NewImpactcardsabi(contractAddress, optimsimClient)
 		if err != nil {
@@ -130,6 +130,7 @@ func CheckAddressForTwoOrMoreImpactCards(clts *models.Clients) http.HandlerFunc 
 			go func(i int) {
 				defer wg.Done()
 				balance, err := impactCardInstance.BalanceOf(&bind.CallOpts{}, commonAddress, big.NewInt(int64(i)))
+				log.Println("balance", balance)
 				if err != nil {
 					log.Println(err)
 					helpers.RespondWithError(w, http.StatusInternalServerError, "Internal server error")
@@ -148,6 +149,7 @@ func CheckAddressForTwoOrMoreImpactCards(clts *models.Clients) http.HandlerFunc 
 			totalBalance.Add(totalBalance, balance)
 		}
 
+		log.Println("totalBalance", totalBalance)
 		// Balance is greater or equal to 2 return true, else return false
 		if totalBalance.Cmp(big.NewInt(2)) >= 0 {
 			resp := models.DefaultResponse{
