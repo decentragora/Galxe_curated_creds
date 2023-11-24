@@ -135,10 +135,16 @@ func CheckAddressHoldEcclesia(clts *models.Clients) http.HandlerFunc {
 		// 3 - perclesian
 		// if tier is 0, then return true
 		if tier == 0 {
-			helpers.RespondWithJSON(w, http.StatusOK, true)
+			resp := response{
+				Result: true,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
-		helpers.RespondWithJSON(w, http.StatusOK, false)
+		resp := response{
+			Result: false,
+		}
+		helpers.RespondWithJSON(w, http.StatusOK, resp)
 		return
 	}
 }
@@ -201,10 +207,16 @@ func CheckAddressHoldsHoplite(clts *models.Clients) http.HandlerFunc {
 		// 3 - perclesian
 		// if tier is 2, then return true
 		if tier == 2 {
-			helpers.RespondWithJSON(w, http.StatusOK, true)
+			resp := response{
+				Result: true,
+			}
+			helpers.RespondWithJSON(w, http.StatusOK, resp)
 			return
 		}
-		helpers.RespondWithJSON(w, http.StatusOK, false)
+		resp := response{
+			Result: false,
+		}
+		helpers.RespondWithJSON(w, http.StatusOK, resp)
 		return
 	}
 }
