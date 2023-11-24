@@ -56,8 +56,7 @@ func CheckAddressHasSentFiveOrMoreTxOnPGN(clts *models.Clients) http.HandlerFunc
 
 		log.Println("nonce", nonce)
 
-		// if nonce - one is greater than or equal to 5 then return true
-		if nonce > 5 {
+		if nonce >= 5 {
 			resp := response{
 				Result: true,
 			}
@@ -107,7 +106,9 @@ func CheckAddressHasSentTenOrMoreTxOnPGN(clts *models.Clients) http.HandlerFunc 
 			return
 		}
 
-		if nonce > 10 {
+		log.Println("nonce", nonce)
+
+		if nonce >= 10 {
 			resp := response{
 				Result: true,
 			}
